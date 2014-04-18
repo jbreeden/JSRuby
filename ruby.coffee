@@ -19,14 +19,12 @@ LocalVariableBehavior = org.jruby.embed.LocalVariableBehavior;
   ruby.setGemHome = (gemHome) ->
     ruby("ENV['GEM_HOME'] = #{gemHome}")
 
-  ruby.preload = (list) ->
-    if list?.length?
-      script = list[1..list.length].reduce(
+  ruby.preload = (gems...) ->
+    if gems.length >= 1
+      script = gems[1..gems.length].reduce(
         ((p, c) -> "#{p}; require '#{c}'"),
-        "require '#{list[0]}'"
+        "require '#{gems[0]}'"
       )
-    else if list?
-      script = "require #{list}"
     else
       script = ""
     requireThread = new Thread(() ->
