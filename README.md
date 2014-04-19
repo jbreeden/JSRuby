@@ -1,3 +1,8 @@
+!!! UNDER CONSTRUCTION !!!
+==========================
+
+Still working out the threading details.
+
 JSRUBY
 ======
 
