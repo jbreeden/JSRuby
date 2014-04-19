@@ -1,5 +1,5 @@
-JSRuby
-======
+JSRuby (alpha)
+==============
 
 Run JRuby code from your Nashorn Projects
 
