@@ -33,8 +33,7 @@ global.Ruby = ->
       when RuntimeState.FAILED
         throw 'Ruby runtime failed to load.'
       when RuntimeState.LOADED
-        result = scriptingContainer.runScriptlet(code)
-        return result
+        scriptingContainer.runScriptlet(code)
 
   ruby.setGemHome = (gemHome) ->
     ruby("ENV['GEM_HOME'] = #{gemHome}")
@@ -42,22 +41,23 @@ global.Ruby = ->
   return ruby
 
 global.Ruby.preload = (gems...) ->
+  unless runtimeState is RuntimeState.UNLOADED
+    throw 'Ruby.preload([gems]) must be called exactly once'
   runtimeState = RuntimeState.LOADING
-
-  if gems.length >= 1
-    script = gems[1..gems.length].reduce(
-      ((p, c) -> "#{p}; require '#{c}'"),
-      "require '#{gems[0]}'"
-    )
-  else
-    script = "nil"
-
   (new Thread(() ->
     try
-      return if runtimeState == RuntimeState.LOADED
-      scriptingContainer.runScriptlet script
+      scriptingContainer.runScriptlet makeRequireScript(gems...)
       runtimeState = RuntimeState.LOADED
     catch ex
       runtimeState = RuntimeState.FAILED
       throw ex
   )).start()
+
+makeRequireScript = (gems...) ->
+  if gems.length >= 1
+    gems[1..gems.length].reduce(
+      ((p, c) -> "#{p}; require '#{c}'"),
+      "require '#{gems[0]}'"
+    )
+  else
+    "nil"
