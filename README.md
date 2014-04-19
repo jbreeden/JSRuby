@@ -95,9 +95,9 @@ Preloading JRuby
 ----------------
 
 JRuby has a notoriously slow startup time, most of which seems to be spent requiring gems.
-This can be an issue if JRuby is in charge of your UI - say, if you're using [JRubyFX](https://github.com/jruby/jrubyfx).
-However, with a UI written in JavaScript or CoffeeScript you can preload the JRuby runtime and
-any gems you'll need while you're waiting on user input.
+This can be an issue if JRuby is in charge of your UI. However, with a UI written in JavaScript 
+or CoffeeScript you can preload the JRuby runtime and any gems you'll need while you're waiting 
+for user input.
 
 For this, JSRuby provides the `Ruby.preload` method. `Ruby.preload` must be called exactly once
 before any ruby code invocation. Once called, `Ruby.preload` will `require` any and all of it's
